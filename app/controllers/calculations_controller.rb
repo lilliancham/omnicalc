@@ -11,13 +11,14 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.gsub(" ", "").length
 
-    @word_count = "Replace this string with your answer."
+    @word_count = @text.split(" ").length
 
-    @occurrences = "Replace this string with your answer."
+    @occurrences = @text.count(@special_word)
+
 
     # ================================================================================
     # Your code goes above.
@@ -38,7 +39,7 @@ class CalculationsController < ApplicationController
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
 
-    @monthly_payment = "Replace this string with your answer."
+    @monthly_payment = @principal*((1+@apr/100)**@years)/(@years*12)
 
     # ================================================================================
     # Your code goes above.
@@ -60,12 +61,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds/60
+    @hours = @minutes/60
+    @days = @hours/24
+    @weeks = @days/7
+    @years = @days/365.25
 
     # ================================================================================
     # Your code goes above.
@@ -82,27 +83,58 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.count
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @sorted_numbers[0]
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @sorted_numbers[@count-1]
 
-    @range = "Replace this string with your answer."
+    @range = @sorted_numbers[@count-1] - @sorted_numbers[0]
 
-    @median = "Replace this string with your answer."
+    if @numbers.count.odd?
+        @median = @sorted_numbers[@count/2]
+    else
+        @median = (@sorted_numbers[@count/2] + @sorted_numbers[@count/2 -1])/2
+    end
 
-    @sum = "Replace this string with your answer."
+    @sum = 0
+    @numbers.each do|the_num|
+        @sum = @sum + the_num
+    end
 
-    @mean = "Replace this string with your answer."
+    @mean = @sum/@count
 
-    @variance = "Replace this string with your answer."
+    @sum_2 = 0
+    @numbers.each do|the_num|
+        @sum_2 = @sum_2 +(the_num-@mean)**2
+    end
 
-    @standard_deviation = "Replace this string with your answer."
+    @variance = @sum_2/@count
 
-    @mode = "Replace this string with your answer."
+    @standard_deviation = Math.sqrt(@variance)
+
+
+    def mode(array)
+      counter = Hash.new(0)
+      array.each do |i|
+        counter[i] += 1
+      end
+
+      mode_array = []
+
+      counter.each do |k, v|
+        if v == counter.values.max
+          mode_array << k
+        end
+      end
+
+      @mode = mode_array.sort[0]
+
+    end
+
+    mode(@numbers)
 
     # ================================================================================
     # Your code goes above.
